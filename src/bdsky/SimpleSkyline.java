@@ -95,6 +95,7 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
     public List<SkylineSegment> getSegments(double time1, double time2) {
 
         Double[] times = getTimes();
+        int insertionPoint;
 
         if (time1 < times[0] || time2 < times[0]) {
             throw new RuntimeException("Time is smaller than smallest time in skyline function!");
@@ -105,42 +106,54 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
         }
 
         List<SkylineSegment> segments = new ArrayList<>();
+        Double[] rawValues = rawValues();
+
+        // Only one interval in skyline
+        if (times.length == 1) {
+            segments.add(new SkylineSegment(time1,time2, rawValues[0]));
+            return segments;
+        }
 
         int index1 = Arrays.binarySearch(times, time1);
         int index2 = Arrays.binarySearch(times, time2);
 
-        Double[] rawValues = rawValues();
 
-        // same insertion point
+        // Get the first segment
         if (index1 == index2) {
-            int insertionPoint = -(index1 + 1);
+            // Case 1: Both times fall within one interval and NOT on a boundary
+            // (Since time1 != time2 this can only happen when the times are not in the skyline,
+            //  which means both indices will be negative)
+            insertionPoint = -(index1 + 1);
             segments.add(new SkylineSegment(time1, time2, rawValues[insertionPoint-1]));
-            return segments;
-        }
-
-        // not same insertion points
+        } else
         if (index1 < 0) {
-            int insertionPoint = -(index1 + 1);
+            // Case 2: time1 is in the middle of a segment
+            insertionPoint = -(index1 + 1);
             segments.add(new SkylineSegment(time1,times[insertionPoint], rawValues[insertionPoint-1]));
             index1 = insertionPoint;
-            if (index1 == index2) return segments;
         } else {
+            // Case 3: time1 is at the start of a segment
             segments.add(new SkylineSegment(times[index1],times[index1+1], rawValues[index1]));
             index1 += 1;
-            if (index1 == index2) return segments;
         }
-        if (index2 < 0) {
-            int insertionPoint = -(index2 + 1);
+
+        // If there are more segments, add them
+        if (index1 != index2) {
+            // Does time2 end in the middle of an interval?
+            insertionPoint = index2 < 0 ? -(index2 + 1) : index2+1;
+
+            // Add all complete intervals between the first and time2
             for (int i = index1; i < insertionPoint-1; i++ ) {
                 segments.add(new SkylineSegment(times[i],times[i+1], rawValues[i]));
             }
-            segments.add(new SkylineSegment(times[insertionPoint-1],time2, rawValues[insertionPoint-1]));
-            return segments;
-        } else {
-            for (int i = index1; i < index2; i++ ) {
-                segments.add(new SkylineSegment(times[i],times[i+1], rawValues[i]));
+
+            // If time2 is in the middle of an interval add the last segment
+            if (index2 < 0) {
+                segments.add(new SkylineSegment(times[insertionPoint-1],time2, rawValues[insertionPoint-1]));
             }
         }
+
+
         return segments;
     }
 

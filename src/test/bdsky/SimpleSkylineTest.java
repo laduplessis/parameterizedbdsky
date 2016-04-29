@@ -5,6 +5,7 @@ import beast.core.parameter.RealParameter;
 import bdsky.SimpleSkyline;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -214,7 +215,11 @@ public class SimpleSkylineTest {
         skyline.setInputValue("times", new RealParameter("0"));
         skyline.setInputValue("parameter", new RealParameter("-1"));
 
-        List<SkylineSegment> segments = skyline.getSegments(-1,0);
+        System.out.println(Arrays.toString(skyline.getTimes()));
+        System.out.println(skyline.getValues());
+
+
+        List<SkylineSegment> segments = skyline.getSegments();
 
     }
 
