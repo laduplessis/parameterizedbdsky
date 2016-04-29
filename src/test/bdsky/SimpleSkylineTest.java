@@ -14,6 +14,8 @@ import static org.junit.Assert.*;
  */
 public class SimpleSkylineTest {
 
+
+
     @Test
     public void testGetValue() throws Exception {
 
@@ -32,6 +34,21 @@ public class SimpleSkylineTest {
 
         assertEquals(-1.5, skyline.getValue(3)[0], 0);
         assertEquals(-1.5, skyline.getValue(3.5)[0], 0);
+    }
+
+    // Skyline with single interval (no shifts)
+    @Test
+    public void testGetValue2() throws Exception {
+
+        SimpleSkyline skyline = new SimpleSkyline();
+        skyline.setInputValue("times", new RealParameter("0"));
+        skyline.setInputValue("parameter", new RealParameter("-1"));
+
+        assertEquals(-1, skyline.getValue(0)[0], 0);
+        assertEquals(-1, skyline.getValue(0.5)[0], 0);
+        assertEquals(-1, skyline.getValue(4.5)[0], 0);
+        assertEquals(-1, skyline.getValue(500)[0], 0);
+
     }
 
     @Test
@@ -187,6 +204,18 @@ public class SimpleSkylineTest {
 
         assertEquals(3, segments.get(0).value[0], 0.0);
         assertEquals(4, segments.get(1).value[0], 0.0);
+    }
+
+    // Skyline with single interval (no shifts)
+    @Test
+    public void testSegments7() throws Exception {
+
+        SimpleSkyline skyline = new SimpleSkyline();
+        skyline.setInputValue("times", new RealParameter("0"));
+        skyline.setInputValue("parameter", new RealParameter("-1"));
+
+        List<SkylineSegment> segments = skyline.getSegments(-1,0);
+
     }
 
 
