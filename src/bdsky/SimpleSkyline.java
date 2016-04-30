@@ -26,7 +26,7 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
             new Input<RealParameter>("parameter",
                     "The parameter values specifying the value for each piecewise constant segment of the skyline function. " +
                     "The first value is between t_0 and t_1, the last value is between t_n and infinity. " +
-                    "Should be the same length as time vector", (RealParameter) null);
+                    "Should be the same length as time vector", (RealParameter) null, Input.Validate.REQUIRED);
 
     @Override
     public void initAndValidate() {
@@ -39,6 +39,10 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
                 throw new RuntimeException("Times must be in ascending order!");
             }
             smallest = time;
+        }
+
+        if (times[0] != 0) {
+            throw new IllegalArgumentException("Skyline times must start with 0!");
         }
     }
 

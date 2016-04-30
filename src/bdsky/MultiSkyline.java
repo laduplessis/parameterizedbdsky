@@ -45,7 +45,7 @@ public class MultiSkyline extends CalculationNode implements Skyline {
 
         //System.out.println(boundaries);
 
-        int[] index = new int[skylines.size()];
+        //int[] index = new int[skylines.size()];
         List<SkylineSegment> segments = new ArrayList<>();
 
 
@@ -56,14 +56,13 @@ public class MultiSkyline extends CalculationNode implements Skyline {
         while (i < boundaries.size()) {
 
             int j = i + 1;
-
             double end = Double.POSITIVE_INFINITY;
             if (j != boundaries.size()) {
-                Boundary2 boundary = boundaries.get(j);
-                end = boundary.time;
+                end = boundaries.get(j).time;
 
                 while (j < boundaries.size() && end == start) {
                     j += 1;
+
                     if (j == boundaries.size()) {
                         end = Double.POSITIVE_INFINITY;
                     } else {
@@ -73,22 +72,29 @@ public class MultiSkyline extends CalculationNode implements Skyline {
                 //System.out.println("next end = " + boundaries.get(j));
             }
 
-            double[] value = new double[index.length];
-            for (int k = 0; k < index.length; k++) {
 
-                int ind = index[k];
+            double[] value = new double[skylines.size()];
+            for (int k = 0; k < skylines.size(); k++) {
 
-                value[k] = skylines.get(k).getValues().get(ind)[0];
+                //int ind = index[k];
+                //value[k] = skylines.get(k).getValues().get(ind)[0];
+
+                value[k] = skylines.get(k).getValue(start)[0];
             }
 
             SkylineSegment segment = new SkylineSegment(start, end, value);
             segments.add(segment);
             //System.out.println("Added segment: " + segment);
 
+            // This doesn't work when two skylines have segments ending at the same time
+            // i.e. when two skylines have the same set of times
+            /*
             if (j != boundaries.size()) {
                 index[boundaries.get(j).skylineIndex] += 1;
-                //System.out.println("incremented index for skyline " + boundaries.get(j).skylineIndex);
+                System.out.println("incremented index for skyline " + boundaries.get(j).skylineIndex);
             }
+            */
+
             i = j;
             start = end;
         }
