@@ -3,6 +3,7 @@ package test.bdsky;
 import bdsky.SkylineSegment;
 import beast.core.parameter.RealParameter;
 import bdsky.SimpleSkyline;
+import org.jcp.xml.dsig.internal.dom.DOMUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -215,12 +216,17 @@ public class SimpleSkylineTest {
         skyline.setInputValue("times", new RealParameter("0"));
         skyline.setInputValue("parameter", new RealParameter("-1"));
 
-        System.out.println(Arrays.toString(skyline.getTimes()));
-        System.out.println(skyline.getValues());
-
-
         List<SkylineSegment> segments = skyline.getSegments();
 
+        assertEquals("Checking number of segments", 1, segments.size());
+        assertEquals(0.0, segments.get(0).t1, 0.0);
+        assertEquals(Double.POSITIVE_INFINITY, segments.get(0).t2, 0.0);
+
+        segments = skyline.getSegments(0.375, 2132);
+
+        assertEquals("Checking number of segments", 1, segments.size());
+        assertEquals(0.375, segments.get(0).t1, 0.0);
+        assertEquals(2132, segments.get(0).t2, 0.0);
     }
 
 

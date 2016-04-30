@@ -110,7 +110,7 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
 
         // Only one interval in skyline
         if (times.length == 1) {
-            segments.add(new SkylineSegment(time1,time2, rawValues[0]));
+            segments.add(new SkylineSegment(time1,time2,rawValues[0]));
             return segments;
         }
 
@@ -152,7 +152,6 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
                 segments.add(new SkylineSegment(times[insertionPoint-1],time2, rawValues[insertionPoint-1]));
             }
         }
-
 
         return segments;
     }
