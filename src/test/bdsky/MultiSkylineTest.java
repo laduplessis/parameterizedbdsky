@@ -209,7 +209,16 @@ public class MultiSkylineTest {
         assertEquals(2, multiSkyline.getDimension());
         assertEquals(4, multiSkyline.getSegments().size());
 
+        // Forward order
         for (SkylineSegment seg : multiSkyline.getSegments()) {
+            System.out.println(seg.start()+"-"+seg.end()+"\t"+ Arrays.toString(seg.value));
+        }
+
+        // Reverse order
+        List<SkylineSegment> segments = multiSkyline.getSegments();
+        SkylineSegment seg;
+        for (int i = segments.size(); --i >=0;) {
+            seg = segments.get(i);
             System.out.println(seg.start()+"-"+seg.end()+"\t"+ Arrays.toString(seg.value));
         }
 

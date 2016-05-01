@@ -47,6 +47,42 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
     }
 
     /**
+     * Set the bounds for the skyline parameter
+     */
+    public void setBounds(Double lower, Double upper) {
+        parameterInput.get().setBounds(upper, lower);
+    }
+
+    /**
+     * Set lower bound for skyline parameter
+     */
+    public void setLower(Double lower) {
+        parameterInput.get().setLower(lower);
+    }
+
+    /**
+     * Set upper bound for skyline parameter
+     */
+    public void setUpper(Double upper) {
+        parameterInput.get().setUpper(upper);
+    }
+
+    /**
+     * Get lower bound for skyline parameter
+     */
+    public Double getLower() {
+        return parameterInput.get().getLower();
+    }
+
+    /**
+     * Get upper bound for skyline parameter
+     */
+    public Double getUpper() {
+        return parameterInput.get().getUpper();
+    }
+
+
+    /**
      *
      * @return the times for this skyline function
      */

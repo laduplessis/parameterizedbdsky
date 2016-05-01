@@ -44,9 +44,27 @@ public class FlexibleSkyline extends SimpleSkyline {
                 timesInput.setValue(new RealParameter(times), this);
             }
 
-        }
+        } else {
 
-        super.initAndValidate();
+            Double[] times = getTimes();
+
+            double smallest = Double.NEGATIVE_INFINITY;
+            for (Double time : times) {
+                if (time < smallest) {
+                    throw new RuntimeException("Times must be in ascending order!");
+                }
+                smallest = time;
+            }
+
+            if (relativeTimesInput.get() == true && smallest >= 1) {
+                throw new IllegalArgumentException("Relative times and time >= 1!");
+            }
+
+            if (times[0] != 0) {
+                throw new IllegalArgumentException("Skyline times must start with 0!");
+            }
+
+        }
     }
 
 }
