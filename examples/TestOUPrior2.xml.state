@@ -1,0 +1,8 @@
+<itsabeastystatewerein version='2.0' sample='10000'>
+<statenode id='x'>x[10 1] (-Infinity,Infinity): 0.14906757331678727 1.3829530939765438 2.5451677583845593 2.8062620223951478 2.6637433636084578 3.3758163551863865 5.672558855737086 5.454899962432503 7.163245588356549 7.065714114210994 </statenode>
+</itsabeastystatewerein>
+<!--
+{"operators":[
+{"id":"scaler","p":0.75,"accept":7789,"reject":2212,"acceptFC":0,"rejectFC":0,"rejectIv":0,"rejectOp":0}
+]}
+-->

@@ -70,6 +70,7 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
     /**
      * Get lower bound for skyline parameter
      */
+
     public Double getLower() {
         return parameterInput.get().getLower();
     }

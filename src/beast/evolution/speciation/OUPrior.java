@@ -1,4 +1,4 @@
-package bdsky;
+package beast.evolution.speciation;
 
 import beast.core.Distribution;
 import beast.core.Function;
@@ -7,6 +7,7 @@ import beast.core.State;
 import beast.core.parameter.RealParameter;
 import beast.math.distributions.ParametricDistribution;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -23,6 +24,10 @@ public class OUPrior extends Distribution {
     // the times associated with the x_i values
     public Input<Function> timeInput =
             new Input<>("times", "The times t_i specifying when x changes", (Function) null);
+
+    // reverse times (x0 is in the present)
+    public Input<Boolean> reverseInput =
+            new Input<>("reverseTime", "If true times are assumed from present to origin (default = false)", false);
 
     // mean
     public Input<RealParameter> meanInput =
@@ -47,11 +52,20 @@ public class OUPrior extends Distribution {
         double sigma = sigmaInput.get().getValue();
         double sigsq = sigma * sigma;
         double nu = nuInput.get().getValue();
+        boolean reverse = reverseInput.get();
 
         ParametricDistribution x0Prior = x0PriorInput.get();
 
         double[] t = timeInput.get().getDoubleValues();
         double[] x = xInput.get().getDoubleValues();
+
+        if (reverse) {
+            for (int i = 0; i < x.length/2; i++) {
+                double temp   = x[i];
+                x[i]          = x[x.length-i-1];
+                x[x.length-i-1] = temp;
+            }
+        }
 
         boolean logspace = logSpace.get();
         if (logspace) {
