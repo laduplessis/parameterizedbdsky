@@ -1,7 +1,5 @@
 package bdsky;
 
-import bdsky.Skyline;
-import bdsky.SkylineSegment;
 import beast.core.CalculationNode;
 import beast.core.Input;
 import beast.core.parameter.RealParameter;
@@ -12,21 +10,32 @@ import java.util.List;
 
 /**
  * A skyline function for a parameter
+ *
+ * @author Alexei Drummond
  */
 public class SimpleSkyline extends CalculationNode implements Skyline {
 
     // the interval times for the skyline function (e.g. "0 1 2 3")
     public Input<RealParameter> timesInput =
-            new Input<RealParameter>("times", "The times t_i specifying when the parameter changes occur. " +
+            new Input<>("times", "The times t_i specifying when the parameter changes occur. " +
                     "Times must be in ascending order.", (RealParameter) null);
 
     // the parameter values, must have the same length as times vector
-    // (e.g. "-1 3 4 -1.5", means -1 between [0,1), 3 between [1,2), ..., -1.5 between [3,infinity))
+    // (e.g. "-1 3 4 -1.5", means -1 between [0,1), 3 between [1,2), ..., -1.5 between [3,origin))
     public Input<RealParameter> parameterInput =
-            new Input<RealParameter>("parameter",
+            new Input<>("parameter",
                     "The parameter values specifying the value for each piecewise constant segment of the skyline function. " +
                     "The first value is between t_0 and t_1, the last value is between t_n and infinity. " +
                     "Should be the same length as time vector", (RealParameter) null, Input.Validate.REQUIRED);
+
+    public Input<RealParameter> originInput =
+            new Input<>("origin",
+                    "The 'origin' of the skyline. Either the beginning or the end, depending on the direction of time.", (RealParameter) null, Input.Validate.REQUIRED);
+
+    public Input<Boolean> timesRelativeToOriginInput =
+            new Input<>("timesRelativeToOrigin",
+                    "If true, then the times are expressed at relative to the origin. default is false.", (Boolean) false, Input.Validate.OPTIONAL);
+
 
     @Override
     public void initAndValidate() {
@@ -85,10 +94,16 @@ public class SimpleSkyline extends CalculationNode implements Skyline {
 
     /**
      *
-     * @return the times for this skyline function
+     * @return the times for this skyline function. Will pre-calculate absolute times using the origin parameter if the times input parameter provides relative times.
      */
     public Double[] getTimes() {
-        return timesInput.get().getValues();
+        Double[] times = timesInput.get().getValues();
+        if (timesRelativeToOriginInput.get()) {
+            for (int i = 0; i < times.length; i++) {
+                times[i] *= originInput.get().getValue();
+            }
+        }
+        return times;
     }
 
     /**
